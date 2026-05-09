@@ -7,6 +7,8 @@ from game import word_guessing_game
 REPO_ROOT = Path(__file__).resolve().parent.parent
 # Boolean for main.py (MAIN) to print debug print statements if desired.
 MAIN_DEBUGGER = False
+# 
+TEST_LIST = ["Algorithms", "algorithmic", "algorithm", "debris", "rockstar", "callous", "germane"]
 
 
 
@@ -42,10 +44,9 @@ if __name__ == "__main__":
         print("***LIST OF VALID WORD FROM MAIN():***")
         print(word_list)
     
-    test_list = ["Algorithms", "algorithmic", "algorithm", "debris", "rockstar", "callous", "germane"]
     if MAIN_DEBUGGER:
-        # Call word_guessing_game() on the test list
-        word_guessing_game(test_list)
+        # Call word_guessing_game() on the global test list
+        word_guessing_game(TEST_LIST)
     else:
         # Call word_guessing_game() on the processed word list
         word_guessing_game(word_list)
