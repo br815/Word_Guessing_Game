@@ -64,9 +64,9 @@ To install the latest version of Python (Python 3) on Windows 11 or less, follow
 4. After installing Python and adding it to `Path`, make sure to restart your IDE to avoid compilation errors.
 
 ## Install NLTK
-NLTK is necessary to run this project.
+The Python library `NLTK` is necessary to run this project.
 
-To install NLTK, open the terminal and run:
+To install `NLTK`, open the terminal and run:
 <!-- CODE START -->
 ```
 pip install nltk
@@ -107,9 +107,9 @@ Successfully installed click-8.3.3 colorama-0.4.6 joblib-1.5.3 nltk-3.9.4 regex-
 <!-- CODE END -->
 
 ## Download NLTK Data
-After installing NLTK, you will need to download some or all of its data.
+After installing `NLTK`, you will need to download some or all of its data.
 
-To download NLTK data, follow these instructions:
+To download `NLTK` data, follow these instructions:
 1. Open the terminal and type `python` (or `python3`) to open the Python interactive shell.
   <!-- CODE START -->
   ```
@@ -136,9 +136,9 @@ To download NLTK data, follow these instructions:
   showing info https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/index.xml
   ```
   <!-- CODE END -->
-3. This output should simultaneously opens a new window for the `NLTK Downloader`. Here, you can select which data to download. If disk space is not a concern, you can download all of the data. However, this project only requires the data in `book` ("Everything used in the NLTK Book"). (You can re-open the `NLTK Downloader` at any time by repeating the steps in this section.)
+3. This output should simultaneously opens a new window for the `NLTK Downloader`. Here, you can select which data to download. If disk space is not a concern, you can download all of the data. However, this project only requires the data in `book` ("Everything used in the `NLTK Book`"). (You can re-open the `NLTK Downloader` at any time by repeating the steps in this section.)
 
-To view your downloaded NLTK data in File Explorer, note the Download directory specified in the `NLTK Downloader`. It should look similar to:
+To view your downloaded `NLTK` data in File Explorer, note the Download directory specified in the `NLTK Downloader`. It should look similar to:
   <!-- CODE START -->
   ```
   C:\Users\Owner\AppData\Roaming\nltk_data
@@ -151,6 +151,71 @@ To view your downloaded NLTK data in File Explorer, note the Download directory 
   ```
   <!-- CODE END -->
 
+## Install Requests & Beautiful Soup
+The Python libraries `Requests` and `Beautiful Soup` are necessary to run this project.
+
+To install `Requests`, open the terminal and run:
+<!-- CODE START -->
+```
+pip install requests
+```
+<!-- CODE END -->
+To install `Beautiful Soup`, open the terminal and run:
+<!-- CODE START -->
+```
+pip install bs4
+```
+<!-- CODE END -->
+
+You should see output similar to:
+<!-- CODE START -->
+```
+Collecting requests
+  Downloading requests-2.33.1-py3-none-any.whl.metadata (4.8 kB)
+Collecting charset_normalizer<4,>=2 (from requests)
+  Downloading charset_normalizer-3.4.7-cp314-cp314-win_amd64.whl.metadata (41 kB)
+Collecting idna<4,>=2.5 (from requests)
+  Downloading idna-3.13-py3-none-any.whl.metadata (8.0 kB)
+Collecting urllib3<3,>=1.26 (from requests)
+  Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting certifi>=2023.5.7 (from requests)
+  Downloading certifi-2026.4.22-py3-none-any.whl.metadata (2.5 kB)
+Downloading requests-2.33.1-py3-none-any.whl (64 kB)
+Downloading charset_normalizer-3.4.7-cp314-cp314-win_amd64.whl (159 kB)
+Downloading idna-3.13-py3-none-any.whl (68 kB)
+Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+Downloading certifi-2026.4.22-py3-none-any.whl (135 kB)
+Installing collected packages: urllib3, idna, charset_normalizer, certifi, requests
+   ━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━ 2/5 [charset_normalizer]  WARNING: The script normalizer.exe is installed in 'C:\Users\Owner\AppData\Local\Python\pythoncore-3.14-64\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+Successfully installed certifi-2026.4.22 charset_normalizer-3.4.7 idna-3.13 requests-2.33.1 urllib3-2.7.0
+
+[notice] A new release of pip is available: 26.0.1 -> 26.1
+[notice] To update, run: C:\Users\Owner\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pip install --upgrade pip
+```
+<!-- CODE END -->
+And:
+<!-- CODE START -->
+```
+Collecting bs4
+  Downloading bs4-0.0.2-py2.py3-none-any.whl.metadata (411 bytes)
+Collecting beautifulsoup4 (from bs4)
+  Downloading beautifulsoup4-4.14.3-py3-none-any.whl.metadata (3.8 kB)
+Collecting soupsieve>=1.6.1 (from beautifulsoup4->bs4)
+  Downloading soupsieve-2.8.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting typing-extensions>=4.0.0 (from beautifulsoup4->bs4)
+  Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Downloading bs4-0.0.2-py2.py3-none-any.whl (1.2 kB)
+Downloading beautifulsoup4-4.14.3-py3-none-any.whl (107 kB)
+Downloading soupsieve-2.8.3-py3-none-any.whl (37 kB)
+Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Installing collected packages: typing-extensions, soupsieve, beautifulsoup4, bs4
+Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-extensions-4.15.0
+
+[notice] A new release of pip is available: 26.0.1 -> 26.1
+[notice] To update, run: C:\Users\Owner\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pip install --upgrade pip
+```
+<!-- CODE END -->
 
 ## POS Tags
 | Tag | Meaning | Example | Allowed? |
