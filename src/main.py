@@ -1,15 +1,18 @@
+from pathlib import Path
 from process_file import process_file
 from process_text import process_text
 from game import word_guessing_game
 
+# Path to the repository root.
+REPO_ROOT = Path(__file__).resolve().parent.parent
 # Boolean for main.py (MAIN) to print debug print statements if desired.
 MAIN_DEBUGGER = False
 
 
 
 if __name__ == "__main__":
-    # Provide name of the sub-directory with input files.
-    dir_with_texts = "texts"
+    # Provide the path to the sub-directory with input files.
+    dir_with_texts = REPO_ROOT / "texts"
 
     try:
         while True:

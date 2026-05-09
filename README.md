@@ -2,7 +2,7 @@
 ## By Bushra Rahman
 This repository is for a word guessing game.
 
-## Highlights
+## Highlights (NEEDS EDITING)
 * keyword extraction
 * topic modeling
 * corpus analysis
@@ -192,7 +192,7 @@ To view your downloaded NLTK data in File Explorer, note the Download directory 
 | WP$ | possessive wh-pronoun | whose | ❌ |
 | WRB | wh-adverb | when | ❌ |
 
-## Run Word Guessing Game (EDIT)
+## Run Word Guessing Game (NEEDS EDITING)
 Open terminal in `WordGuessingGame` and run:
 <!-- CODE START -->
 ```
