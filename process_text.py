@@ -1,0 +1,167 @@
+from unicodedata import normalize, combining
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
+from nltk import pos_tag
+from nltk.corpus import wordnet
+from nltk.stem import WordNetLemmatizer
+from collections import Counter
+
+
+
+# GLOBALS
+# Const for minimum length of a word (eg. 5 letters), for filtration.
+MIN_TOK_LEN = 5
+# Const for minimum frequency of a word occurring (eg. twice), for filtration.
+MIN_FREQ_VAL = 2
+# Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.
+# Instead of leaving stopwords as list with O(n) lookup, set() is used for O(1) hash lookup.
+STOPWORDS_SET = set(stopwords.words("english"))
+# Global tokenizer.
+TOKENIZER = RegexpTokenizer(r"[A-Za-z'’]+")
+# Global lemmatizer.
+LEMMATIZER = WordNetLemmatizer()
+# Boolean for process_text.py (PT) to print debug print statements if desired.
+PT_DEBUGGER = False
+
+
+
+# Penn TreeBank POS tags returned by pos_tag() are NOT compatible with WordNetLemmatizer().
+# This dictionary maps the specified pos_tags to their equivalent WordNet tags. Add or remove pos_tags to this dict as desired.
+POS_DICT = {
+    # Desired Penn TreeBank tags here are: certain nouns, all verbs, all adjectives, certain adverbs.
+
+    # Nouns
+    "NN": wordnet.NOUN,
+    "NNS": wordnet.NOUN,
+
+    # Verbs
+    "VB": wordnet.VERB,
+    "VBD": wordnet.VERB,
+    "VBG": wordnet.VERB,
+    "VBN": wordnet.VERB,
+    "VBP": wordnet.VERB,
+    "VBZ": wordnet.VERB,
+
+    # Adjectives
+    "JJ": wordnet.ADJ,
+    "JJR": wordnet.ADJ,
+    "JJS": wordnet.ADJ,
+
+    # Adverbs
+    "RBR": wordnet.ADV,
+    "RBS": wordnet.ADV
+}
+
+
+
+def remove_accents(input_str):
+    # Convert to NFKD: decompose characters into base chars + combining (diacritic) chars.
+    nfkd_form = normalize('NFKD', input_str)
+
+    # Generator expression used to rejoin base chars into a string.
+    unaccented_str = ''.join(
+        char 
+        for char 
+        in nfkd_form 
+        if not combining(char)) # if not a combining (diacritic) char.
+
+    return unaccented_str
+# End of remove_accents()
+
+
+
+def is_valid_token(tok):
+    # Token must not be a contraction (ie. should not contain ' or ’).
+    if "'" in tok or "’" in tok:
+        if PT_DEBUGGER:
+            print("***Token \"%s\" failed filtration check due to: IS CONTRACTION***" %tok)
+        return False
+    # Token must not be a stopword.
+    if tok in STOPWORDS_SET:
+        if PT_DEBUGGER:
+            print("***Token \"%s\" failed filtration check due to: IS STOPWORD***" %tok)
+        return False
+    # Token length must be at least (ie. >=) the minimum length.
+    if len(tok) < MIN_TOK_LEN:
+        if PT_DEBUGGER:
+            print("***Token \"%s\" failed filtration check due to: LENGTH < %i***" %(tok, MIN_TOK_LEN))
+        return False
+
+    # Return True if token passes all the previous checks.
+    return True
+# End of is_valid_token()
+
+
+
+def process_text(raw_text):
+    # 1st: Clean raw text to convert accented words into unaccented words.
+    unaccented_text = remove_accents(raw_text)
+
+    # 2nd: Tokenize using RegEx to extract sequences consisting ONLY of letters (A-Z, a-z) or apostrophes (', ’).
+    # Contractions are preserved in the tokenization so they can later be cleanly rejected by is_valid_token().
+    tokens = TOKENIZER.tokenize(unaccented_text)
+
+    # 3rd: List comprehension used to filter tokens to only those that pass the checks in is_valid_token().
+    filtered_tokens = [
+        tok                             # Do not lowercase tokens until POS filtration, so that proper nouns remain as is.
+        for tok 
+        in tokens 
+        if is_valid_token(tok.lower())] # Check lowercase tokens because stopwords list is in lowercase.
+
+    # Edge case: if no tokens pass the checks, display error message.
+    if len(filtered_tokens) == 0:
+        print("ERROR: No valid tokens found in the selected input file.")
+        return None
+
+    if PT_DEBUGGER:
+        print("***FILTERED TOKENS FROM PROCESS_TEXT():***\n\"%s\"" %filtered_tokens)
+
+    # 4th: POS Tagging.
+    # List comprehension used to filter tokens to only those that match the desired POS.
+    # The (word, POS) tuple is preserved so that a word's POS can be used later for lemmatization.
+    tags = pos_tag(filtered_tokens)
+    filtered_pos = [
+        (word.lower(), pos)     # Tokens are normalized to lowercase here, once POS filtration is done on each token.
+        for word, pos 
+        in tags 
+        if pos in POS_DICT]
+
+    # Edge case: if no tokens pass the checks, display error message.
+    if len(filtered_pos) == 0:
+        print("ERROR: No valid parts of speech were found in the selected input file.")
+        return None
+    
+    if PT_DEBUGGER:
+        print("***FILTERED POS FROM PROCESS_TEXT():***\n\"%s\"" %filtered_pos)
+
+    # 5th: List comprehension used to lemmatize the filtered tokens, using POS information to get more accurate lemmatization.
+    all_lemmas = [
+        LEMMATIZER.lemmatize(word, POS_DICT[pos])   # Use dict mapping to convert pos_tag to WordNet tag.
+        for word, pos 
+        in filtered_pos]
+
+    if PT_DEBUGGER:
+        print("***ALL LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %all_lemmas)
+
+    # 6th: Count frequencies of each lemma.
+    # List comprehension used to filter lemmas only by those appearing "frequently".
+    lemma_counts = Counter(all_lemmas)
+    frequent_lemmas = [
+        lemma 
+        for lemma, count 
+        in lemma_counts.most_common()   # most_common() returns items sorted by descending frequency.
+        if count >= MIN_FREQ_VAL]
+
+    # Edge case: if no lemma meets the min freq requirement, just allow words that occur at least once.
+    if len(frequent_lemmas) == 0:
+        frequent_lemmas = [
+            lemma 
+            for lemma, count 
+            in lemma_counts.most_common() 
+            if count >= 1]
+
+    if PT_DEBUGGER:
+        print("***COMMON LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %frequent_lemmas)
+
+    return frequent_lemmas
+# End of process_text()
