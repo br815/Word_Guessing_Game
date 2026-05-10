@@ -1,15 +1,23 @@
 import re
 from random import randint
 
+# 
+GAME_DEBUGGER = False
+
 # This function takes a list of strings as input.
 def word_guessing_game(wordlist):
     # The word is randomly chosen from the list
     index = randint(0, len(wordlist)-1)
-    print("length of list is %i" %len(wordlist))
-    print("index is %i" %index)
-    word = wordlist[index]
-    # Hard-coded variable for debugging
-    # word = "placeholder"
+
+    if GAME_DEBUGGER:
+        print("length of list is %i" %len(wordlist))
+        print("index is %i" %index)
+    
+    if GAME_DEBUGGER:
+        word = "placeholder"
+    else:
+        word = wordlist[index]
+
 
     print("\nLet's play a word guessing game! Here are the rules:")
     print("1. You start with 5 points.")

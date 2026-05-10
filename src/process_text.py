@@ -1,14 +1,12 @@
-from unicodedata import normalize, combining
-from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords
-from nltk import pos_tag
-from nltk.corpus import wordnet
+from nltk.tokenize import RegexpTokenizer
+from unicodedata import normalize, combining
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
+from nltk import pos_tag
 from collections import Counter
 
-
-
-# GLOBALS
+# GLOBALS:
 # Const for minimum length of a word (eg. 5 letters), for filtration.
 MIN_TOK_LEN = 5
 # Const for minimum frequency of a word occurring (eg. twice), for filtration.
@@ -16,25 +14,23 @@ MIN_FREQ_VAL = 2
 # Global stopwords set so that it doesn't have to be reloaded repeatedly for each token to be checked against.
 # Instead of leaving stopwords as list with O(n) lookup, set() is used for O(1) hash lookup.
 STOPWORDS_SET = set(stopwords.words("english"))
-# Global tokenizer.
+# Global tokenizer. Checks for sequences of uppercase letters or lowercase letters or apostrophes.
 TOKENIZER = RegexpTokenizer(r"[A-Za-z'’]+")
 # Global lemmatizer.
 LEMMATIZER = WordNetLemmatizer()
 # Boolean for process_text.py (PT) to print debug print statements if desired.
 PT_DEBUGGER = False
-
-
-
 # Penn TreeBank POS tags returned by pos_tag() are NOT compatible with WordNetLemmatizer().
-# This dictionary maps the specified pos_tags to their equivalent WordNet tags. Add or remove pos_tags to this dict as desired.
+# This global dictionary maps the specified pos_tags to their equivalent WordNet tags.
+# Add or remove pos_tags to this dict as desired.
 POS_DICT = {
     # Desired Penn TreeBank tags here are: certain nouns, all verbs, all adjectives, certain adverbs.
 
-    # Nouns
+    # Nouns:
     "NN": wordnet.NOUN,
     "NNS": wordnet.NOUN,
 
-    # Verbs
+    # Verbs:
     "VB": wordnet.VERB,
     "VBD": wordnet.VERB,
     "VBG": wordnet.VERB,
@@ -42,18 +38,24 @@ POS_DICT = {
     "VBP": wordnet.VERB,
     "VBZ": wordnet.VERB,
 
-    # Adjectives
+    # Adjectives:
     "JJ": wordnet.ADJ,
     "JJR": wordnet.ADJ,
     "JJS": wordnet.ADJ,
 
-    # Adverbs
+    # Adverbs:
     "RBR": wordnet.ADV,
     "RBS": wordnet.ADV
 }
 
 
 
+''' Helper Function 1:		remove_accents()
+	Descr:			        This function replaces any accented characters in a text with unaccented characters.
+	Param:			        input_str
+                            String for a text that may contain accented characters.
+	Return:			        unaccented_str
+					        String for the text with all accented characters replaced. '''
 def remove_accents(input_str):
     # Convert to NFKD: decompose characters into base chars + combining (diacritic) chars.
     nfkd_form = normalize('NFKD', input_str)
@@ -70,6 +72,12 @@ def remove_accents(input_str):
 
 
 
+''' Helper Function 2:		is_valid_token()
+	Descr:			        This function checks if a token passes a series of conditions.
+	Param:			        tok
+                            String for a token.
+	Return:			        True OR False
+					        Boolean indicating whether the token passes the given conditions. '''
 def is_valid_token(tok):
     # Token must not be a contraction (ie. should not contain ' or ’).
     if "'" in tok or "’" in tok:
@@ -93,6 +101,13 @@ def is_valid_token(tok):
 
 
 
+''' Function 3:		        process_text()
+	Descr:			        This function tokenizes, lemmatizes, and counts lemma frequencies of a given text.
+                            It then returns a word list of frequent lemmas in the text.
+	Param:			        raw_text
+                            A string for unprocessed text.
+	Return:			        frequent_lemmas
+					        A list of the lemmas that occur frequently and meet all desired conditions. '''
 def process_text(raw_text):
     # 1st: Clean raw text to convert accented words into unaccented words.
     unaccented_text = remove_accents(raw_text)
@@ -161,7 +176,7 @@ def process_text(raw_text):
             if count >= 1]
 
     if PT_DEBUGGER:
-        print("***COMMON LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %frequent_lemmas)
+        print("***FREQUENT LEMMAS FROM PROCESS_TEXT():***\n\"%s\"" %frequent_lemmas)
 
     return frequent_lemmas
 # End of process_text()

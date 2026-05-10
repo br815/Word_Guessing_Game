@@ -261,6 +261,7 @@ Successfully installed beautifulsoup4-4.14.3 bs4-0.0.2 soupsieve-2.8.3 typing-ex
 Open terminal in `WordGuessingGame` and run:
 <!-- CODE START -->
 ```
-python main.py texts/anat19.txt
+cd src
+python main.py
 ```
 <!-- CODE END -->

@@ -1,9 +1,17 @@
 from pathlib import Path
+
+# GLOBAL:
 # Boolean for process_file.py (PF) to print debug print statements if desired.
 PF_DEBUGGER = False
 
 
 
+''' Helper Function 1:		select_file_from_dir()
+	Descr:			        This function lists the files in a given directory and prompts the user to select one.
+	Param:			        dir_name
+                            Relative path to a directory in the repo.
+	Return:			        selected_file
+					        Relative path to the user-selected file in the given directory. '''
 def select_file_from_dir(dir_name):
     # Build path to target directory.
     dir = Path(dir_name)
@@ -56,6 +64,12 @@ def select_file_from_dir(dir_name):
 
 
 
+''' Helper Function 2:		read_selected_file()
+	Descr:			        This function opens a given input file, reads it, and returns its contents.
+	Param:			        input_file
+                            Relative path to an input file.
+	Return:			        input_file_text
+					        String for the contents of the input file. '''
 def read_selected_file(input_file):
     # Read selected file.
     with open(input_file, "r", encoding="utf-8") as f:
@@ -71,12 +85,18 @@ def read_selected_file(input_file):
 
 
 
-# Function to print list of filenames in a given directory,
-# prompt user to select a file, open file and read in its contents,
-# and return the contents.
-def process_file(directory_name):
+''' Function 3:		        process_file()
+	Descr:			        This function calls the helper functions to 
+                            print list of filenames in a given directory,
+                            prompt user to select a file, open file and read in its contents,
+                            and return the contents.
+	Param:			        dir_name
+                            Relative path to a directory in the repo.
+	Return:			        raw_text
+					        String for the contents of an input file. '''
+def process_file(dir_name):
 
-    selected_file = select_file_from_dir(directory_name)
+    selected_file = select_file_from_dir(dir_name)
 
     raw_text = read_selected_file(selected_file)
 

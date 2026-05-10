@@ -3,11 +3,12 @@ from process_file import process_file
 from process_text import process_text
 from game import word_guessing_game
 
-# Path to the repository root.
+# GLOBALS:
+# Path to this repo's root.
 REPO_ROOT = Path(__file__).resolve().parent.parent
 # Boolean for main.py (MAIN) to print debug print statements if desired.
 MAIN_DEBUGGER = False
-# 
+# Test wordlist to easily run word_guessing_game() on.
 TEST_LIST = ["Algorithms", "algorithmic", "algorithm", "debris", "rockstar", "callous", "germane"]
 
 
@@ -43,7 +44,7 @@ if __name__ == "__main__":
     if MAIN_DEBUGGER:
         print("***LIST OF VALID WORD FROM MAIN():***")
         print(word_list)
-    
+
     if MAIN_DEBUGGER:
         # Call word_guessing_game() on the global test list
         word_guessing_game(TEST_LIST)
